@@ -1,3 +1,4 @@
+// ✅ Use the full published URL, not just the sheet ID
 const publicSpreadsheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQrgFhbLMxe37E1aOO4ohoDez-krVef4PNI5oHPl47_KvVZ4s6hP30k3j8swqYvjCzj6leuyvvHJrs3/pubhtml";
 
 window.addEventListener("DOMContentLoaded", init);
@@ -11,10 +12,12 @@ function init() {
 }
 
 function showMenu(data) {
-  console.log("Data from sheet:", data); // Debug
+  console.log("Fetched data from sheet:", data); // For debugging
 
+  // Clear existing menu items
   document.querySelectorAll(".menu-category ul").forEach(ul => ul.innerHTML = "");
 
+  // Populate menu from each row
   data.forEach(row => {
     if (row.Breakfast) addItem("breakfast", row.Breakfast);
     if (row.Lunch) addItem("lunch", row.Lunch);
@@ -22,6 +25,7 @@ function showMenu(data) {
     if (row.Special) addItem("special", row.Special);
   });
 
+  // Add today's date
   document.getElementById("date").innerText =
     new Date().toLocaleDateString("en-IN", {
       weekday: "long",
