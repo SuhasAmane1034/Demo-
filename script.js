@@ -1,18 +1,18 @@
-// Replace this with your actual Google Sheet ID
-const sheetID = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQrgFhbLMxe37E1aOO4ohoDez-krVef4PNI5oHPl47_KvVZ4s6hP30k3j8swqYvjCzj6leuyvvHJrs3/pubhtml?gid=0&single=true";
+const publicSpreadsheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQrgFhbLMxe37E1aOO4ohoDez-krVef4PNI5oHPl47_KvVZ4s6hP30k3j8swqYvjCzj6leuyvvHJrs3/pubhtml";
 
 window.addEventListener("DOMContentLoaded", init);
 
 function init() {
   Tabletop.init({
-    key: sheetID,
+    key: publicSpreadsheetURL,
     callback: showMenu,
     simpleSheet: true
   });
 }
 
 function showMenu(data) {
-  // Clear previous data
+  console.log("Data from sheet:", data); // Debug
+
   document.querySelectorAll(".menu-category ul").forEach(ul => ul.innerHTML = "");
 
   data.forEach(row => {
@@ -22,9 +22,13 @@ function showMenu(data) {
     if (row.Special) addItem("special", row.Special);
   });
 
-  // Add current date
   document.getElementById("date").innerText =
-    new Date().toLocaleDateString("en-IN", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+    new Date().toLocaleDateString("en-IN", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    });
 }
 
 function addItem(category, item) {
