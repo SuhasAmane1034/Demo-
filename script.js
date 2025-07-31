@@ -1,21 +1,35 @@
-// Menu data (can be replaced with API or Google Sheet later)
-const menu = {
-  breakfast: ["Idli & Sambar", "Poha", "Upma"],
-  lunch: ["Veg Thali", "Chicken Curry", "Roti & Dal"],
-  snacks: ["Samosa", "Vada Pav", "Tea", "Coffee"],
-  special: ["Paneer Biryani", "Falooda", "Ice Cream"]
-};
+// Replace this with your actual Google Sheet ID
+const sheetID = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQrgFhbLMxe37E1aOO4ohoDez-krVef4PNI5oHPl47_KvVZ4s6hP30k3j8swqYvjCzj6leuyvvHJrs3/pubhtml?gid=0&single=true";
 
-// Update date
-document.getElementById("date").innerText =
-  new Date().toLocaleDateString("en-IN", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+window.addEventListener("DOMContentLoaded", init);
 
-// Load menu items
-Object.keys(menu).forEach(category => {
-  const list = document.querySelector(`#${category} ul`);
-  menu[category].forEach(item => {
-    const li = document.createElement("li");
-    li.textContent = item;
-    list.appendChild(li);
+function init() {
+  Tabletop.init({
+    key: sheetID,
+    callback: showMenu,
+    simpleSheet: true
   });
-});
+}
+
+function showMenu(data) {
+  // Clear previous data
+  document.querySelectorAll(".menu-category ul").forEach(ul => ul.innerHTML = "");
+
+  data.forEach(row => {
+    if (row.Breakfast) addItem("breakfast", row.Breakfast);
+    if (row.Lunch) addItem("lunch", row.Lunch);
+    if (row.Snacks) addItem("snacks", row.Snacks);
+    if (row.Special) addItem("special", row.Special);
+  });
+
+  // Add current date
+  document.getElementById("date").innerText =
+    new Date().toLocaleDateString("en-IN", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+}
+
+function addItem(category, item) {
+  const ul = document.querySelector(`#${category} ul`);
+  const li = document.createElement("li");
+  li.textContent = item;
+  ul.appendChild(li);
+}
